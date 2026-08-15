@@ -25,12 +25,12 @@ class TestBooksCollector:
     # напиши свои тесты ниже
     # чтобы тесты были независимыми в каждом из них создавай отдельный экземпляр класса BooksCollector()
     
-    def test_add_new_book_adds_book_with_empty_genre(self):
+    def test_add_new_book_valid_name_added(self):
         collector = BooksCollector()
 
         collector.add_new_book('Гарри Поттер')
 
-        assert collector.get_books_genre() == {'Гарри Поттер' : ''}
+        assert collector.get_books_genre() == {'Гарри Поттер': ''}
 
     @pytest.mark.parametrize('name', ['','a' * 41])
     def test_add_new_book_invalid_name_not_added(self, name):
@@ -40,21 +40,28 @@ class TestBooksCollector:
 
         assert collector.get_books_genre() == {}
 
-    @pytest.mark.parametrize('genre, expected_genre', [('Ужасы', 'Ужасы'), ('Мелодрама', '')])
-    def test_set_book_genre_valid_and_invalid_genre(self, genre, expected_genre):
+    def test_set_book_genre_valid_genre_is_set(self):
         collector = BooksCollector()
         collector.add_new_book('Оно')
 
-        collector.set_book_genre('Оно', genre)
+        collector.set_book_genre('Оно', 'Ужасы')
 
-        assert collector.get_book_genre('Оно') == expected_genre
+        assert collector.get_book_genre('Оно') == 'Ужасы'
+
+    def test_set_book_genre_invalid_genre_not_set(self):
+        collector = BooksCollector()
+        collector.add_new_book('Оно')
+
+        collector.set_book_genre('Оно', 'Мелодрама')
+
+        assert collector.get_book_genre('Оно') == ''  
 
     def test_get_book_genre_returns_none_for_nonexistent_book(self):
         collector = BooksCollector()
 
         assert collector.get_book_genre('Нет такой книги') is None
 
-    def test_get_books_with_specific_genre_returns_matching_bookы(self):
+    def test_get_books_with_specific_genre_returns_matching_books(self):
         collector = BooksCollector()
         collector.add_new_book('Книга 1')
         collector.add_new_book('Книга 2')
